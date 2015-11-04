@@ -48,7 +48,7 @@ public class BlockGenerator : MonoBehaviour
                 ++currBlockCount;
                 temp.GetComponent<NormalBlock>().InitWithGenerator(this);
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.2f);
             }
 
             yield return null;
