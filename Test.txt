@@ -1,3 +1,0 @@
-LOL!
-
-Git Clone -> Push ( URL ) -> Commit

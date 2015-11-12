@@ -5,12 +5,14 @@ public class Block : MonoBehaviour
 {
     protected BlockGenerator gene;
     protected InGameData data;
+    protected bool canTouch = true;
+
     protected void Awake()
     {
         data = GameObject.FindObjectOfType<InGameData>();
     }
 
-    public void InitWithGenerator(BlockGenerator _gene)
+    public virtual void InitWithGenerator(BlockGenerator _gene)
     {
         gene  = _gene;
 
@@ -25,19 +27,28 @@ public class Block : MonoBehaviour
 
     protected virtual void OnMouseDown()
     {
-        data.isSelected = false;
+        canTouch = !data.isPause;
+
+
+        if (data.isSelected)
+            canTouch = false;
+
+        data.isSelected = true;
     }
 
     protected virtual void OnMouseEnter()
     {
-        if (!data.isSelected)
-            return;
+        canTouch = !data.isPause;
 
+        if (!data.isSelected)
+            canTouch = false;
 
     }
 
     protected virtual void OnMouseUp()
     {
+        canTouch = !data.isPause;
+
         data.isSelected = false;
 
     }
