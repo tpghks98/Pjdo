@@ -33,9 +33,28 @@ public class ShowNumber : MonoBehaviour
     private int positionalNumver = 0;                   // 숫자 자리수
     void Awake()
     {
+        Initialize();
+    }
+    public void Initialize()
+    {
+        if (numbers[0] == null)
+        {
+            return;
+        }
         imgWidth = numbers[0].bounds.size.x * 100;
         AddImage();
     }
+
+    public void LoadNumberResources(string str)
+    {
+        for (int n = 0; n < 10; ++n)
+        {
+            numbers[n] = Resources.Load(str + n, typeof(Sprite)) as Sprite;
+        }
+        comma = Resources.Load(str + ",", typeof(Sprite)) as Sprite;
+
+    }
+
 
     public void PrintNumber(int num)
     {

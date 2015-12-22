@@ -12,10 +12,17 @@ public enum BlockColor
     Purple,
     Gray
 };
+public enum OBJID
+{
+    Combo,
+    Max
+};
 
 
 public class InGameData : MonoBehaviour
 {
+    private List<BaseObj> m_lstObject = new List<BaseObj>();
+
     public List<NormalBlock> selectedBlock = new List<NormalBlock>();
 
     public bool isStart = false;
@@ -31,6 +38,7 @@ public class InGameData : MonoBehaviour
     {
 
         Debug.Log("Data Awake");
+        this.CreateObject(OBJID.Combo);
     }
 
 
@@ -73,6 +81,10 @@ public class InGameData : MonoBehaviour
                 // 점수추가 해야됨 
                 AddPoint(1, selectedBlock[i].GetBlockColor());
                 AddScore(10);
+                if (i == 1)
+                {
+                    TransmitAnsToObj( true );
+                }
             }
             else
             {
@@ -80,6 +92,7 @@ public class InGameData : MonoBehaviour
                 selectedBlock[i].ChangeColor(BlockColor.Gray);
                 AddPoint(-3, selectedBlock[i].GetBlockColor()); 
                 AddScore(-10);
+                TransmitAnsToObj( false );
             }
 
         }
@@ -133,4 +146,55 @@ public class InGameData : MonoBehaviour
         }
         return false;
     }
+
+
+    // Object
+
+    public BaseObj CreateObject( OBJID ID)
+    {
+        GameObject go;
+        BaseObj pObj = null;
+        go = new GameObject();
+
+
+        switch (ID)
+        {
+            case OBJID.Combo:
+                pObj = go.AddComponent<Combo>();
+                break;
+            default:
+                GameObject.Destroy(go);
+                return null;
+        }
+        go.transform.position = Vector3.zero;
+        go.transform.localScale = Vector3.one;
+
+        pObj.Initialize();
+        m_lstObject.Add(pObj);
+
+        go.name = ID.ToString();
+        return pObj;
+    }
+    
+    // To all object transmit ans or wrong ans
+    private void TransmitAnsToObj( bool IsAns)
+    {
+        int nCount = m_lstObject.Count;
+
+        if (IsAns)
+        {
+            for (int n = 0; n < nCount; ++n)
+            {
+                m_lstObject[n].OnOccurredCorrectAns();
+            }
+        }
+        else
+        {
+            for (int n = 0; n < nCount; ++n)
+            {
+                m_lstObject[n].OnOccurredInCorrectAns();
+            }
+        }
+    }
+    
 }
