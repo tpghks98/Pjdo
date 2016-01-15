@@ -51,17 +51,11 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Analytics">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
@@ -71,6 +65,9 @@
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson">
+      <HintPath>Assets\Plugins\LitJson.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -82,10 +79,16 @@
     <Compile Include="Assets\Scripts\InGame\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\InGame\Object\BlockEffect.cs" />
     <Compile Include="Assets\Scripts\InGame\Object\Character.cs" />
+    <Compile Include="Assets\Scripts\InGame\Object\Clouds.cs" />
+    <Compile Include="Assets\Scripts\InGame\Object\New Folder\Func\VariationScale.cs" />
+    <Compile Include="Assets\Scripts\InGame\Object\New Folder\Object\BaseObj.cs" />
+    <Compile Include="Assets\Scripts\InGame\Object\New Folder\Object\Combo\Combo.cs" />
     <Compile Include="Assets\Scripts\InGame\Object\NormalBlock.cs" />
     <Compile Include="Assets\Scripts\InGame\UI\BeforeGame.cs" />
     <Compile Include="Assets\Scripts\InGame\UI\ResultUI.cs" />
     <Compile Include="Assets\Scripts\InGame\UI\ShowNumber.cs" />
+    <Compile Include="Assets\Scripts\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Result\Result.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

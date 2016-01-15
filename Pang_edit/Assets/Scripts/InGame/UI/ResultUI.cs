@@ -81,6 +81,7 @@ public class ResultUI : MonoBehaviour
     }
     public void OnResultOkButtonDown()
     {
-        Application.LoadLevel(0);
+        data.CheckJob();
+        Application.LoadLevel("Badge");
     }
 }

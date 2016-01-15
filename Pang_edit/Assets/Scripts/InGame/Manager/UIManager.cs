@@ -11,10 +11,9 @@ public class UIManager : MonoBehaviour
     public GameObject resultUI;
     public Image[] gauges;
     public GameObject beforeGame;
-
+    public GameObject timeUP;
 
     public GameObject liveScore;
-    public GameObject resultScore;
 
     private ShowNumber score_live;
     private InGameData data;
@@ -33,18 +32,15 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    if (!data.isStart)
-        //        return;
-        //    Debug.Log("Pause!");
-        //    data.isPause = !data.isPause; 
-        //    pauseUI.SetActive(data.isPause);
-
-        //}
 
         if (data.isPause || !data.isStart)
             return;
+
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            data.isPause = true;
+            pauseUI.SetActive(true);
+        }
         // Time
         if (playTime > 0 )
         {
@@ -53,7 +49,9 @@ public class UIManager : MonoBehaviour
         }
         else // TimeOver
         {
-            TimeOver();
+            data.isPause = true;
+            timeUP.SetActive(true);
+            StartCoroutine(TimeOverRoutine());
         }
 
 
@@ -68,15 +66,39 @@ public class UIManager : MonoBehaviour
 
     public void OnApplicationPause(bool pause)
     {
+        if(data.isPause)
+            return;
+
         //  pause는 false 
         data.isPause = true;
         pauseUI.SetActive(data.isPause);
     }
 
 
-    void TimeOver()
+    float fallingTime = 1.5f;
+    float endY        = 0;
+    IEnumerator TimeOverRoutine()
     {
-        data.isPause = true;
+        float currTime = 0.0f;
+
+        while (currTime < fallingTime)
+        {
+            currTime += Time.deltaTime;
+            float y = EasingUtil.bounce(800, endY, currTime / fallingTime);
+            timeUP.transform.localPosition = new Vector2(0, y);
+            yield return null;
+        }
+
+        timeUP.transform.position = new Vector2(0, endY);
+        yield return new WaitForSeconds(0.5f);
+        timeUP.SetActive(false);
+        ShowResult();
+    }
+
+    void ShowResult()
+    {
+        Debug.Log("Show");
+
         resultUI.SetActive(true);
     }
 

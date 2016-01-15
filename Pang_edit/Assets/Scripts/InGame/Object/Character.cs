@@ -20,7 +20,6 @@ public class Character : MonoBehaviour
                 currTime += Time.deltaTime;
             else
             {
-                Debug.Log("aa");
                 ani.Play("idle");
                 currTime = 0.0f;
             }

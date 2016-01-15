@@ -1,22 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class NormalBlock : MonoBehaviour
 {
     public Sprite[] colors;
     [SerializeField]
     private BlockColor color;
 
+    [SerializeField]
+    private float moveTime = 0.2f;
+    [SerializeField]
+    private float vibrationTime = 0.2f;
+
     public  int _blockX;
     public  int _blockY;
     public  bool isChecked = false;
+    public  bool isEffecting;
 
-    private BlockGenerator gene;
+    private BlockGenerator  gene;
+    private Animator        ani;
     private InGameData data;
     private bool canTouch = false;
     private BlockColor prevColor = BlockColor.None;
     
-
+    private bool once = true;
 
     void Awake()
     {
@@ -28,8 +36,9 @@ public class NormalBlock : MonoBehaviour
         _blockX = blockX;
         _blockY = blockY;
 
-
+        once = true;
         gene = _gene;
+        isEffecting =   false;
 
         transform.position = gene.transform.position;
         gameObject.SetActive(true);
@@ -38,20 +47,67 @@ public class NormalBlock : MonoBehaviour
         ChangeColor(color);
 
     }
-    
-    void OnDisable()
+
+    public void UpdateBoard()
     {
-       // data.board[_blockX, _blockY] = (int)BlockColor.None;
         gene.DownBlock(_blockY);
         gene.MinusCurrBlockCount(1);
     }
 
+    void OnDisable()
+    {
+        // data.board[_blockX, _blockY] = (int)BlockColor.None;
+        gene.DownBlock(_blockY);
+        gene.MinusCurrBlockCount(1);
+
+
+    }
+
     void Update()
     {
+        if(data.linePosY[_blockY] != transform.localPosition.y)
+        {
+            if (once)
+            {
+                once = false;
+                if (transform.localPosition.y == 0)
+                    StartCoroutine(MoveProcess(data.linePosY[_blockY], moveTime+0.2f));
+                else
+                    StartCoroutine(MoveProcess(data.linePosY[_blockY],moveTime));
+            }
+        }
         if(data.isStart)
             canTouch = !data.isPause;
     }
+   
 
+
+    IEnumerator MoveProcess(float targetY,float moveT)
+    {
+        float currTime = 0.0f;
+        float saveY     =   _blockY;
+
+        while (currTime < moveT)
+        {
+            if (saveY != _blockY)
+            {
+                once = true;
+                yield break;
+            }
+
+            currTime += Time.deltaTime;
+            float y = EasingUtil.linear(transform.localPosition.y, targetY, currTime / moveT);
+            transform.localPosition = new Vector2(transform.localPosition.x, y);
+            yield return null;
+        }
+
+        transform.localPosition = new Vector2(transform.localPosition.x, targetY);
+
+
+        once = true;
+        yield break;
+
+    }
     public BlockColor GetBlockColor()
     {
         return color;
@@ -83,21 +139,33 @@ public class NormalBlock : MonoBehaviour
 
     }
 
-
-
     void OnMouseDown()
     {
-        if (!canTouch)
+        if (!canTouch || isEffecting)
             return;
-        Debug.Log("X :" + _blockX + " Y :" + _blockY + " COLOR : " +color);
+        //Debug.Log("X :" + _blockX + " Y :" + _blockY + " COLOR : " +color);
         isChecked = true;
-        Debug.Log((data.board[0, 3]._blockY));
         data.selectedBlock.Add(this);
         data.StartCheck();
     }
 
+    public IEnumerator Vibration()
+    {
+        float currTime = 0.0f;
+        while (currTime <= vibrationTime * 2)
+        {
+            currTime += Time.deltaTime * 2;
 
+            // 진동 거는 부분 
+            float x = Mathf.Sin(currTime * 40) / 10;
+            transform.localPosition = new Vector2(x, transform.localPosition.y);
+            yield return null;
+        }
 
+        transform.localPosition = new Vector2(0, transform.localPosition.y);
+        yield break;
+
+    }
 
     #region BlockTouch ( OLD ) 
 

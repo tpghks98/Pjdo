@@ -9,46 +9,63 @@ public class BlockGenerator : MonoBehaviour
     private int blockMaxCount  = 7;
     private Transform temp;
     private InGameData data;
-    private int sameInterval = 6;
+    private int sameInterval;
     private int currIdx = 1;
     private int prevRand = 0;
 
+    private bool onceCheck = true;
     void Awake()
     {
         data = GameObject.FindObjectOfType<InGameData>();
     }
     void Start()
     {
+        sameInterval    =   Random.Range(5,9);
         StartCoroutine(LineCheck());
         
     }
 
     IEnumerator LineCheck()
     {
+        int rand = 0;
         while (true)
         {
             if(currBlockCount < blockMaxCount)
             {
-
-
+                onceCheck = true;
                 temp = FIndUnActive();
-                int rand = Random.Range(1, 6);
+                
+                rand = Random.Range(1, 6);
+
                 if(currIdx == sameInterval)
                 {
-                    Debug.Log("SE");
                     rand = prevRand;
                     currIdx = 0;
                 }
-                temp.GetComponent<NormalBlock>().InitWithGenerator(this, generatorIdx, 6 - currBlockCount, rand);
 
                 data.board[generatorIdx, 6 - currBlockCount] = 
                     temp.GetComponent<NormalBlock>();
+
+                
+
+                temp.GetComponent<NormalBlock>().InitWithGenerator(this, generatorIdx, 6 - currBlockCount, rand);
 
                 currIdx++;
                 prevRand = rand;
                 ++currBlockCount;
                 yield return new WaitForSeconds(0.1f);
             }
+            else if (onceCheck)
+            {
+                onceCheck = false;
+                if (!data.IsCanClick())
+                {
+                    // 클릭할수 있는곳이 없을때
+                    data.ResetBoard();
+                }
+                
+            }
+
             yield return null;
         }
     }
@@ -67,6 +84,7 @@ public class BlockGenerator : MonoBehaviour
             if (temps[i]._blockY < pivot)
                 temps[i]._blockY++;
         }
+
     }
     public void MinusCurrBlockCount(int minusValue)
     {

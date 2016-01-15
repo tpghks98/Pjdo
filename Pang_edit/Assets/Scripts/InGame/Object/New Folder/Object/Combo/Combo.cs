@@ -23,6 +23,7 @@ public class Combo : BaseObj {
     private Image           m_pComboObj;
     private ShowNumber      m_pShowNumber;
     private VariationScale  m_pVariationScale;
+    private InGameData      m_pInGameData;
 
     // Property
     public int ComoboCount
@@ -55,6 +56,7 @@ public class Combo : BaseObj {
 
 
 	void Start () {
+        m_pInGameData   =   FindObjectOfType<InGameData>();
         m_pShowNumber = gameObject.AddComponent<ShowNumber>();
         m_pShowNumber.LoadNumberResources("InGame/Sprite/UI/Combo/Num/");
         m_pShowNumber.Initialize();
@@ -104,6 +106,9 @@ public class Combo : BaseObj {
 
     private void TimeUpdate()
     {
+        if(m_pInGameData.isPause)
+            return;
+
         m_fCurrTime += Time.deltaTime;
         if (CheckLimitTime() )
         {
