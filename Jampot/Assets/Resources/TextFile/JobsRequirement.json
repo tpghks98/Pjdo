@@ -1,0 +1,36 @@
+﻿[
+	{
+	"Name" :"Doctor",
+	"Requirement":
+	[60,20,60,20,20]
+	},
+
+	{
+	"Name" :"Sportsman",
+	"Requirement":
+	[20,60,60,20,20]
+	},
+	{
+	"Name" :"Teacher",
+	"Requirement":
+	[20,60,60,20,20]
+	},
+
+	{
+	"Name" :"Writer",
+	"Requirement":
+	[40,40,80,80,70]
+	},
+
+	{
+	"Name" :"Firefighter",
+	"Requirement":
+	[60,20,20,60,20]
+	},
+
+	{
+	"Name" :"President",
+	"Requirement":
+	[100,100,100,100,100]
+	}
+]
